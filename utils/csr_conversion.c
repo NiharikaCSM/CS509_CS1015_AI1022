@@ -35,6 +35,13 @@ CSRGraph readAdjacencyListAsCSR(FILE *filename, int isWeighted) {
     return graph;
 }
 
+int readSourceVertex(FILE *filename) {
+    char keyword[16];
+    int source;
+    fscanf(filename, "%s %d", keyword, &source);
+    return source;
+}
+
 void freeCSRGraph(CSRGraph *graph) {
     free(graph->rowPtr);
     free(graph->colIndex);
