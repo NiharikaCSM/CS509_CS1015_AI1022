@@ -5,13 +5,13 @@
 
 DFSResult runDFS(CSRGraph *graph, int source) {
     DFSResult result;
-    result.traversalOrder = malloc(graph->numVertices * sizeof(int));
+    result.traversalOrder = malloc(graph->vertices * sizeof(int));
     result.traversalCount = 0;
 
     int *visited = calloc(graph->vertices, sizeof(int));
 
     //stack capacity is the number of edges in the graph
-    int stackCapacity = graph->rowPtr[graph->numVertices] + 1;
+    int stackCapacity = graph->rowPtr[graph->vertices] + 1;
     int *stack = malloc(stackCapacity * sizeof(int));
     int stackTop = -1;
 
@@ -32,7 +32,7 @@ DFSResult runDFS(CSRGraph *graph, int source) {
         // Push neighbors in reverse order, so the smallest-index neighbor
         // ends up on top of the stack and gets visited first
         for (int i = end - 1; i >= start; i--) {
-            int neighbor = graph->colIdx[i];
+            int neighbor = graph->colIndex[i];
             if (!visited[neighbor])
                 stack[++stackTop] = neighbor;
         }
