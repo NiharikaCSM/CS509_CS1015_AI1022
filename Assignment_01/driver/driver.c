@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
     if (strcasecmp(method, "bfs") == 0)
         return runBFSFromFile(filePath);
 
-    // if (strcasecmp(method, "dfs") == 0)
-    //     return runDFSFromFile(filePath);
+    if (strcasecmp(method, "dfs") == 0)
+         return runDFSFromFile(filePath);
 
     // if (strcasecmp(method, "sssp") == 0)
     //     return runSSSPFromFile(filePath);
