@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bfs_runner.h"
+#include "dfs_runner.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
