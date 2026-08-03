@@ -23,7 +23,10 @@ CS509_CS1015_AI1022/
 ├── README.md             
 ├── common_wrapper/
 │   ├── wrapper.h
-│   └── wrapper.c          
+│   └── wrapper.c     
+├──utils/    
+│   ├── csr_conversion.h
+│   └── csr_conversion.c  
 ├── assignment_01/
 │   ├── Makefile           
 │   ├── src/               
@@ -39,6 +42,8 @@ CS509_CS1015_AI1022/
 ## Common wrapper
 
 The `common_wrapper/` folder contains a single wrapper file (`wrapper.c`, with its declarations in `wrapper.h`) reused across all assignments. It handles opening input files and measuring/reporting execution time, so the algorithm code itself stays focused on the algorithm.
+
+## utils
 
 ## How to run the code
 (to be filled)
