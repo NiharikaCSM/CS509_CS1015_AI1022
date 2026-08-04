@@ -13,6 +13,7 @@ typedef struct {
 
 CSRGraph readAdjacencyListAsCSR(FILE *fp, int isWeighted);
 
+static void failWithFormatError(const char *message);
 void printCSRGraph(CSRGraph *graph);
 int readSourceVertex(FILE *filename);
 void freeCSRGraph(CSRGraph *graph);
