@@ -11,8 +11,12 @@ static void failWithFormatError(const char *message) {
 CSRGraph readAdjacencyListAsCSR(FILE *filename, int isWeighted) {
     CSRGraph graph;
 
-     if (fscanf(filename, "%d %d", &graph.vertices, &graph.edges) != 2)
-        failWithFormatError("Expected 'V E' on the first line, but couldn't read two integers");
+    char headerLine[256];
+    if (fgets(headerLine, sizeof(headerLine), filename) == NULL)
+        failWithFormatError("file is empty — expected 'V E' on the first line.");
+
+    if (sscanf(headerLine, "%d %d", &graph.vertices, &graph.edges) != 2)
+        failWithFormatError("expected 'V E' on the first line, but couldn't read two integers from it.");
  
     if (graph.vertices <= 0)
         failWithFormatError("Number of vertices (V) must be a positive integer");
@@ -21,6 +25,7 @@ CSRGraph readAdjacencyListAsCSR(FILE *filename, int isWeighted) {
         failWithFormatError("Number of edges (E) cannot be negative.");
 
     int maxPossibleEntries = 2 * graph.edges;
+    printf("Vertices: %d, Edges: %d\n", graph.vertices, graph.edges);
 
     graph.rowPtr = malloc((graph.vertices + 1) * sizeof(int));
     graph.colIndex = malloc(maxPossibleEntries * sizeof(int));
