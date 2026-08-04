@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        printf("Please provide input in correct format");
+        printf("Please provide input in correct format\n");
         return 1;
     }
 
