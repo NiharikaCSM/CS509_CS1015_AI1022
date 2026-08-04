@@ -1,11 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 #include "csr_conversion.h"
+
+static void failWithFormatError(const char *message) {
+    fprintf(stderr, "Error: Invalid input file format - %s\n", message);
+    exit(1);
+}
 
 CSRGraph readAdjacencyListAsCSR(FILE *filename, int isWeighted) {
     CSRGraph graph;
 
-    fscanf(filename, "%d %d", &graph.vertices, &graph.edges);
+     if (fscanf(filename, "%d %d", &graph.vertices, &graph.edges) != 2)
+        failWithFormatError("Expected 'V E' on the first line, but couldn't read two integers");
+ 
+    if (graph.vertices <= 0)
+        failWithFormatError("Number of vertices (V) must be a positive integer");
+ 
+    if (graph.edges < 0)
+        failWithFormatError("Number of edges (E) cannot be negative.");
 
     int maxPossibleEntries = 2 * graph.edges;
 
@@ -18,13 +31,33 @@ CSRGraph readAdjacencyListAsCSR(FILE *filename, int isWeighted) {
 
     for (int v = 0; v < graph.vertices; v++) {
         int vertexId, degree;
-        fscanf(filename, "%d %d", &vertexId, &degree);
+        //fscanf(filename, "%d %d", &vertexId, &degree);
+
+        if (fscanf(filename, "%d %d", &vertexId, &degree) != 2)
+            failWithFormatError("expected a vertex line (id and degree), but the file ended early or contained non-integer data.");
+ 
+        if (vertexId != v)
+            failWithFormatError("vertices must be listed in order 0 to V-1; expected vertex line for a different vertex than the one found.");
+ 
+        if (degree < 0)
+            failWithFormatError("a vertex's degree cannot be negative.");
 
         //add the neighbors of vertex v to the colIndex array
         for (int i = 0; i < degree; i++) {
-            fscanf(filename, "%d", &graph.colIndex[nextFreeSlot]);
-            if (isWeighted)
-                fscanf(filename, "%d", &graph.edgeWeights[nextFreeSlot]);
+            if (fscanf(filename, "%d", &graph.colIndex[nextFreeSlot]) != 1)
+                failWithFormatError("Expected a neighbor vertex id, but the file ended early or contained non-integer data");
+ 
+            if (graph.colIndex[nextFreeSlot] < 0 || graph.colIndex[nextFreeSlot] >= graph.vertices)
+                failWithFormatError("a neighbor id is out of range (must be between 0 and V-1)");
+ 
+            //fscanf(filename, "%d", &graph.colIndex[nextFreeSlot]);
+            if (isWeighted){
+                if (fscanf(filename, "%d", &graph.edgeWeights[nextFreeSlot]) != 1)
+                    failWithFormatError("expected an edge weight after the neighbor id, but the file ended early or contained non-integer data.");
+ 
+                if (graph.edgeWeights[nextFreeSlot] <= 0)
+                    failWithFormatError("edge weights must be positive (SSSP requires this).");                
+            }
             nextFreeSlot++;
         }
 
@@ -38,7 +71,12 @@ CSRGraph readAdjacencyListAsCSR(FILE *filename, int isWeighted) {
 int readSourceVertex(FILE *filename) {
     char keyword[16];
     int source;
-    fscanf(filename, "%s %d", keyword, &source);
+    if (fscanf(filename, "%s %d", keyword, &source) != 2)
+        failWithFormatError("expected a 'SOURCE s' line at the end of the file");
+ 
+    if (strcasecmp(keyword, "source") != 0)
+        failWithFormatError("expected the keyword 'SOURCE' before the source vertex id");
+
     return source;
 }
 
