@@ -16,7 +16,7 @@ converted into three arrays: `rowPtr`, `colIndex`, and (for weighted graphs) `ed
 **DFS** — Explores as deep as possible before backtracking. Implemented iteratively with an explicit stack (rather than recursively) to avoid stack-overflow risk on large graphs as recursion depth could reach 100,000 on the largest required test case. Neighbors are pushed in reverse order so the traversal visits the lowest-indexed neighbor first, matching what
 a straightforward recursive DFS would produce.
 
-**SSSP (Dijkstra)** — 
+**SSSP (Dijkstra)** — **SSSP (Dijkstra)** — Computes the shortest distance from the source to every reachable vertex using a binary min-heap built from scratch (plain arrays, no library heap/priority-queue functions). The heap supports two operations: extracting the vertex with the current smallest known distance, and decreasing a vertex's distance once a shorter path to it is found. Each vertex is extracted from the heap exactly once; when extracted, its neighbors are read directly from `colIndex[rowPtr[v] .. rowPtr[v+1])` along with the matching weights in `edgeWeights`, and any neighbor whose distance improves has its position in the heap adjusted accordingly. Using a heap instead of a linear scan to find the closest unvisited vertex brings the runtime down from O(V²) to O((V + E) log V), which matters at the 50,000–100,000 vertex scale required by this assignment.
 
 ## Input Format, Assumptions, and Constraints
 
@@ -144,16 +144,17 @@ make clean
 | DFS | test_06.txt | 50000 | 150000 | Unweighted adjacency list | 0 | Traversal | Traversal | 3.726000 ms | Pass |
 | BFS | test_07.txt | 100000 | 300000 | Unweighted adjacency list | 0 | Traversal / distances | Traversal / distances | 4.423000 ms | Pass |
 | DFS | test_07.txt | 100000 | 300000 | Unweighted adjacency list | 0 | Traversal | Traversal | 6.223000 ms | Pass |
-| SSSP | sssp_test_01.txt | 10 | 30 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  ms | Pass |
-| SSSP | sssp_test_02.txt | 100 | 300 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  ms | Pass |
-| SSSP | sssp_test_03.txt | 100 | 150 | Positive-weighted adjacency list | 99 | Shortest distances | Shortest distances |  ms | Pass |
-| SSSP | sssp_test_04.txt | 10000 | 30000 | Positive-weighted adjacency list | 4732 | Shortest distances | Shortest distances |  ms | Pass |
-| SSSP | sssp_test_05.txt | 10000 | 30000 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  ms | Pass |
-| SSSP | sssp_test_06.txt | 50000 | 150000 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  ms | Pass |
-| SSSP | sssp_test_07.txt | 100000 | 300000 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  ms | Pass |
+| SSSP | sssp_test_01.txt | 10 | 30 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  0.003000 ms | Pass |
+| SSSP | sssp_test_02.txt | 100 | 300 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  0.078005 ms | Pass |
+| SSSP | sssp_test_03.txt | 100 | 150 | Positive-weighted adjacency list | 99 | Shortest distances | Shortest distances |   0.014711 ms | Pass |
+| SSSP | sssp_test_04.txt | 10000 | 30000 | Positive-weighted adjacency list | 4732 | Shortest distances | Shortest distances |  4.201647 ms | Pass |
+| SSSP | sssp_test_05.txt | 10000 | 30000 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  3.597277 ms | Pass |
+| SSSP | sssp_test_06.txt | 50000 | 150000 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |   48.394000 ms| Pass |
+| SSSP | sssp_test_07.txt | 100000 | 300000 | Positive-weighted adjacency list | 0 | Shortest distances | Shortest distances |  59.736000 ms | Pass |
 
 
 ## Time and Space Complexity
+SSP (Dijkstra with binary heap): O((V + E) log V) time — each of the V vertices is extracted from the heap once (O(log V) per extraction), and each of the E edge entries triggers at most one decrease-key operation (O(log V) each). O(V) space for dist, predecessor, and the two heap arrays (heapVertex, heapPos).
 
 **CSR Conversion:** O(V + E) time (single pass over the input), O(V + E)
 space for the three CSR arrays.
