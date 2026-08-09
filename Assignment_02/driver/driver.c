@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
         //runBetweennessCentralityFromFile(path);
     } 
     else if (strcmp(algorithm, "cc") == 0) {
-        //runConnectedComponentsFromFile(path);
+        runConnectedComponentsFromFile(path);
     } 
     else {
         fprintf(stderr, "Error: Unknown method '%s'. Use 'tc', 'bc', or 'cc'.\n", algorithm);
