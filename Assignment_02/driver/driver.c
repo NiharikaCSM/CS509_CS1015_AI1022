@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         runTriangleCountingFromFile(path);
     } 
     else if (strcmp(algorithm, "bc") == 0) {
-        //runBetweennessCentralityFromFile(path);
+        runBetweennessCentralityFromFile(path);
     } 
     else if (strcmp(algorithm, "cc") == 0) {
         runConnectedComponentsFromFile(path);
