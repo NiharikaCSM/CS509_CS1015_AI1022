@@ -42,7 +42,6 @@ No `SOURCE` line for any of these three — Triangle Counting and Connected Comp
 
 | Algorithm | Required V | Note |
 |---|---|---|
-
 | Triangle Counting | 10, 100, 10,000, 50,000, 100,000 | Full standard scale (O(V+E)-adjacent workload) |
 | Betweenness Centrality | 10, 100, 1,000, 5,000, 10,000 | Reduced scale — O(V·E) via Brandes |
 | Connected Components | 10, 100, 10,000, 50,000, 100,000 | O(V+E), full standard scale |
@@ -75,34 +74,32 @@ Same validation approach as Assignment 1 (`readAdjacencyListAsCSR` / `readSource
 
 **`src/connected_components.c` / `connected_components.h`** — `runConnectedComponents(graph)` returns the component count and per-vertex component id; `freeConnectedComponentsResult(result)` frees them.
 
-**`driver/driver.c`** — parses the input file path and algorithm name (`bf`, `fw`, `tc`, `bc`, `cc`), and dispatches to the matching runner.
+**`driver/driver.c`** — parses the input file path and algorithm name (`tc`, `bc`, `cc`), and dispatches to the matching runner.
 
 **`tc_runner.c`, `bc_runner.c`, `cc_runner.c`** — each opens the input file, prepares the required data structure (CSR or dense matrix, untimed), times only the algorithm call, prints the result, and frees all allocated memory.
 
 **`../common_wrapper/wrapper.c`** (shared across all assignments) — `openFile`, `getExecutionTime`, `printExecutionTime`, reused unchanged.
 
-**`tests/`** — adjacency-list / matrix input files at the required sizes, generated and verified against reference implementations (networkx / scipy.sparse.csgraph):
-- `tc_<V>.txt` for V in {10, 100, 10000, 50000, 100000}, plus edge cases (`tc_no_edges`, `tc_path8`, `tc_cycle10`, `tc_single_triangle`, `tc_complete5`, `tc_star7`, `tc_disconnected`) and `tc_example.txt` (spec §7.2)
-- `bc_<V>.txt` for V in {10, 100, 1000, 5000, 10000}, plus edge cases (`bc_single`, `bc_no_edges`, `bc_star7`, `bc_path8`, `bc_cycle8`, `bc_disconnected`, `bc_complete6`) and `bc_example.txt` (spec §8.2)
-- `cc_<V>.txt` for V in {10, 100, 10000, 50000, 100000}, plus `cc_example.txt` (spec §9.2)
-- `*_expected.txt` files with verified expected output for every hand-checkable / small-to-medium case
+**`tests/`** — adjacency-list files at the required sizes
+
+- `tc_test_<x>.txt` contains test cases for triangle counting
+- `bc_test_<x>.txt` contains test cases for betweenness centrality
+- `cc_test_<x>.txt` contains test cases for connected components
+
+**`tests/malformed_input`** — adjacency-list files for validation checks of all algorithms
 
 ## Compilation and Execution Instructions
 
 From inside `Assignment_02/`:
 
+```bash
+cd Assignment_02
+```
+
 **Compile:**
 ```bash
 make
 ```
-**Run Malformed Input test cases:**
-```bash
-./run tests/malformed_test/mi_<test file name>.txt tc
-./run tests/malformed_test/mi_<test file name>.txt bc
-./run tests/malformed_test/mi_<test file name>.txt cc
-```
-
-
 
 **Run each algorithm:**
 ```bash
@@ -110,6 +107,13 @@ make
 ./run tests/tc_10.txt tc
 ./run tests/bc_10.txt bc
 ./run tests/cc_10.txt cc
+```
+
+**Run Malformed Input test cases:**
+```bash
+./run tests/malformed_test/mi_<test file name>.txt tc
+./run tests/malformed_test/mi_<test file name>.txt bc
+./run tests/malformed_test/mi_<test file name>.txt cc
 ```
 
 **Clean up the compiled binary:**
