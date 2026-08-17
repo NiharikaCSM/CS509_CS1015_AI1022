@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "gradient_descent_runner.h"
-//#include "maxflow_mincut_runner.h"
+#include "maxflow_mincut_runner.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         runGradientDescentFromFile(path);
 
     } else if (strcmp(algorithm, "maxflow") == 0) {
-       //runMaxflowMincutFromFile(path);
+       runMaxflowMincutFromFile(path);
 
     } else {
         fprintf(stderr, "Error: unknown algorithm '%s'\n", algorithm);
