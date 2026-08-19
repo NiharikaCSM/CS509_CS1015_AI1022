@@ -54,13 +54,17 @@ SINK t
 
 ## Source Files, Driver Files, Helper Functions, and Test Files
 
-**`../utils/csr.c` / `csr.h`** (from Assignment 01, reused — not copied):
+**`../utils/csr_conversion.c` / `csr_conversion.h`** (from Assignment 01, reused — not copied):
 - `readAdjacencyListAsCSR(filename, isWeighted, isDirected)` — reads the adjacency list and builds `rowPtr`, `colIndex`, and `edgeWeights` in a single pass.
 - `readSourceVertex(filename)` — reads and validates the trailing `SOURCE s` line.
-- `readSinkVertex(filename)` — reads and validates the trailing `SINK t` line (new for this assignment).
 - `printCSRGraph(graph)` / `freeCSRGraph(graph)`.
 
-**`src/maxflow_mincut.c` / `maxflow_mincut.h`** — `dinicMaxflow(graph, source, sink)` builds the residual graph from CSR and runs Dinic's algorithm, returning max flow value, minimum cut capacity, both sides of the cut, and the cut edges; `freeMaxflowResult(result)` frees them.
+**`../utils/graph_helper.c` / `graph_helper.h`**:
+- `sortNeighborLists(graph)` — sorts the neighbor lists of each vertex in ascending order using `qsort`.
+- `hasEdge(graph, u, v)` — performs a binary search to check whether a directed edge `(u, v)` exists in the CSR structure.
+- `validateUndirectedSymmetry(graph)` — checks that the input file describes a proper undirected graph (i.e., verifies every edge is listed symmetrically on both ends).
+
+**`src/maxflow_mincut.c` / `maxflow_mincut.h`** — `dinicMaxflow(graph, source, sink)` builds the residual graph from CSR and runs Dinic's algorithm, returning max flow value, minimum cut capacity, both sides of the cut, and the cut edges; `readSinkVertex(filename)` — reads and validates the trailing `SINK t` line; `freeMaxflowResult(result)` frees them
 
 **`src/gradient_descent.c` / `gradient_descent.h`** — `runGradientDescent(...)` evaluates `f(x)` / `f'(x)` from the coefficient array and applies the update rule until convergence or `MAX_ITERATIONS`; `freeGradientDescentResult(result)` frees the result.
 
@@ -74,12 +78,16 @@ SINK t
 - `openFile(filename)`, `getExecutionTime()`, `printExecutionTime(start, end)`.
 
 **`tests/`** — input files at the required sizes:
-- `maxflow_<V>.txt` — directed capacity adjacency list, for V in {10, 100, 1000, 10000, 50000} (100,000 optional).
+- `maxflow_<V>.txt` — directed capacity adjacency list, for V in {10, 100, 1000, 10000, 50000, 100,000}.
 - `gd_01.txt` ... `gd_05.txt` — polynomial degrees 2, 4, 6, 8, 10 respectively.
 
 ## Compilation and Execution Instructions
 
-From inside `Assignment03/`:
+From inside `Assignment_03/`:
+
+```bash
+cd Assignment_03
+```
 
 **Compile:**
 ```bash
