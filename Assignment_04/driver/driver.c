@@ -18,10 +18,10 @@ int main(int argc, char *argv[]) {
         runKMeansFromFile(path);
 
     } 
-    // else if (strcmp(algorithm, "fastmap") == 0) {
-    //     runFastMapFromFile(path);
+    else if (strcmp(algorithm, "fastmap") == 0) {
+        runFastMapFromFile(path);
 
-    // } 
+    } 
     else {
         fprintf(stderr, "Error: unknown algorithm '%s'\n", algorithm);
         return EXIT_FAILURE;
